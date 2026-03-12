@@ -1,0 +1,5 @@
+# robots.txt — Javaid Iqbal Portfolio
+User-agent: *
+Allow: /
+
+Sitemap: https://javaidiqbal786.github.io/portfolio/sitemap.xml

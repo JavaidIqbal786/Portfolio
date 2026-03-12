@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Javaid Iqbal | Portfolio</title>
+    <style>
+      /* ── GitHub Pages SPA 404 redirect trick ─────────────────
+         Single-page apps need all routes to resolve to index.html.
+         GitHub Pages only serves static files, so 404s land here.
+         This script stores the path in sessionStorage and redirects
+         to index.html, which then restores the URL.
+         ──────────────────────────────────────────────────────── */
+      body {
+        margin: 0;
+        background: #0a0e17;
+        color: #e6edf3;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        text-align: center;
+      }
+    </style>
+    <script>
+      // Store the attempted path and redirect to root
+      const segmentCount = 1; // 0 for username.github.io, 1 for project pages
+      const loc = window.location;
+      loc.replace(
+        loc.protocol + '//' + loc.hostname + (loc.port ? ':' + loc.port : '') +
+        loc.pathname.split('/').slice(0, 1 + segmentCount).join('/') + '/?/' +
+        loc.pathname.slice(1).split('/').slice(segmentCount).join('/').replace(/&/g, '~and~') +
+        (loc.search ? '&' + loc.search.slice(1).replace(/&/g, '~and~') : '') +
+        loc.hash
+      );
+    </script>
+  </head>
+  <body>
+    <div>
+      <h1 style="font-size:2rem;margin-bottom:0.5rem;">Redirecting…</h1>
+      <p style="color:#8b949e;">If you are not redirected automatically, <a href="/" style="color:#00ff88;">click here</a>.</p>
+    </div>
+  </body>
+</html>
