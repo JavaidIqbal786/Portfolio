@@ -24,7 +24,7 @@ export default defineConfig({
     }),
     visualizer,
   ].filter(Boolean),
-  base: '/portfolio/',
+  base: '/',
   build: {
     outDir: 'dist',
     sourcemap: false,
