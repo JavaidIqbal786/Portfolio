@@ -50,14 +50,10 @@ jobs:
           VITE_EMAILJS_PUBLIC_KEY: ${{ secrets.VITE_EMAILJS_PUBLIC_KEY }}
         run: cd frontend && npm run build
 
-      # ── e) Set CNAME for custom domain (uncomment when you have one) ──
-      # - name: Add CNAME file
-      #   run: cp frontend/public/CNAME frontend/dist/CNAME
-
-      # ── f) Deploy to gh-pages branch ─────────────────────────
+      # ── e) Deploy to gh-pages branch ─────────────────────────
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./frontend/dist
-          # cname: yourdomain.com  # Uncomment and set when you have a custom domain
+          cname: javaidiqbaldev.me
