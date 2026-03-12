@@ -1,0 +1,63 @@
+# ═══════════════════════════════════════════════════════════════
+#  GitHub Pages Deployment — Portfolio
+#  Triggers on every push to `main`. Builds the Vite app and
+#  deploys the dist/ folder to the gh-pages branch.
+# ═══════════════════════════════════════════════════════════════
+
+name: Deploy Portfolio to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+# Allow only one concurrent deployment
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      # ── a) Checkout code ──────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── b) Setup Node.js ─────────────────────────────────────
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      # ── c) Install dependencies ──────────────────────────────
+      - name: Install dependencies
+        run: cd frontend && npm ci
+
+      # ── d) Build ─────────────────────────────────────────────
+      #    EmailJS env vars are injected from GitHub Secrets so
+      #    Vite can inline them at build time (import.meta.env).
+      - name: Build production bundle
+        env:
+          VITE_EMAILJS_SERVICE_ID: ${{ secrets.VITE_EMAILJS_SERVICE_ID }}
+          VITE_EMAILJS_TEMPLATE_ID: ${{ secrets.VITE_EMAILJS_TEMPLATE_ID }}
+          VITE_EMAILJS_PUBLIC_KEY: ${{ secrets.VITE_EMAILJS_PUBLIC_KEY }}
+        run: cd frontend && npm run build
+
+      # ── e) Set CNAME for custom domain (uncomment when you have one) ──
+      # - name: Add CNAME file
+      #   run: cp frontend/public/CNAME frontend/dist/CNAME
+
+      # ── f) Deploy to gh-pages branch ─────────────────────────
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./frontend/dist
+          # cname: yourdomain.com  # Uncomment and set when you have a custom domain
