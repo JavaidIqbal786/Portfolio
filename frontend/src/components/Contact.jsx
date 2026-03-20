@@ -6,7 +6,6 @@ export default function Contact() {
       <div className="mx-auto max-w-4xl px-4">
         <h2 className="text-3xl font-bold mb-8">Contact Information</h2>
 
-        {/* Public contact details */}
         <div className="space-y-3 mb-8">
           <p>
             Email:{" "}
@@ -24,7 +23,7 @@ export default function Contact() {
               href="https://www.linkedin.com/in/javaidiqbalawan/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-emerald-400 hover:underline"
+              className="text-emerald-400 hover:underline break-all"
             >
               https://www.linkedin.com/in/javaidiqbalawan/
             </a>
@@ -36,7 +35,7 @@ export default function Contact() {
               href="https://web.facebook.com/IJavaidIqbal1"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-emerald-400 hover:underline"
+              className="text-emerald-400 hover:underline break-all"
             >
               https://web.facebook.com/IJavaidIqbal1
             </a>
@@ -48,19 +47,18 @@ export default function Contact() {
               href="https://github.com/JavaidIqbal786"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-emerald-400 hover:underline"
+              className="text-emerald-400 hover:underline break-all"
             >
               https://github.com/JavaidIqbal786
             </a>
           </p>
         </div>
 
-        {/* Social icons */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 text-white">
           <a
             href="mailto:javaidiqbaldev@gmail.com"
             aria-label="Email"
-            className="hover:text-emerald-400"
+            className="hover:text-emerald-400 transition-colors"
           >
             <Mail />
           </a>
@@ -70,7 +68,7 @@ export default function Contact() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn"
-            className="hover:text-emerald-400"
+            className="hover:text-emerald-400 transition-colors"
           >
             <Linkedin />
           </a>
@@ -80,7 +78,7 @@ export default function Contact() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Facebook"
-            className="hover:text-emerald-400"
+            className="hover:text-emerald-400 transition-colors"
           >
             <Facebook />
           </a>
@@ -90,7 +88,7 @@ export default function Contact() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
-            className="hover:text-emerald-400"
+            className="hover:text-emerald-400 transition-colors"
           >
             <Github />
           </a>
