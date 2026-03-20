@@ -38,7 +38,7 @@ jobs:
 
       # ── c) Install dependencies ──────────────────────────────
       - name: Install dependencies
-        run: cd frontend && npm ci
+        run: cd frontend && npm install
 
       # ── d) Build ─────────────────────────────────────────────
       - name: Build production bundle
