@@ -41,13 +41,7 @@ jobs:
         run: cd frontend && npm ci
 
       # ── d) Build ─────────────────────────────────────────────
-      #    EmailJS env vars are injected from GitHub Secrets so
-      #    Vite can inline them at build time (import.meta.env).
       - name: Build production bundle
-        env:
-          VITE_EMAILJS_SERVICE_ID: ${{ secrets.VITE_EMAILJS_SERVICE_ID }}
-          VITE_EMAILJS_TEMPLATE_ID: ${{ secrets.VITE_EMAILJS_TEMPLATE_ID }}
-          VITE_EMAILJS_PUBLIC_KEY: ${{ secrets.VITE_EMAILJS_PUBLIC_KEY }}
         run: cd frontend && npm run build
 
       # ── e) Deploy to gh-pages branch ─────────────────────────
