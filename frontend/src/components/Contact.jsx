@@ -1,12 +1,8 @@
 import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import emailjs from '@emailjs/browser';
 import toast from 'react-hot-toast';
 import AnimatedSection from './AnimatedSection';
-
-// Initialize EmailJS with public key at module load
-emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY');
 import {
   HiOutlineEnvelope,
   HiOutlineMapPin,
@@ -22,79 +18,6 @@ import {
 } from 'react-icons/fa6';
 
 /* ═══════════════════════════════════════════════════════════════
-   EmailJS Setup Guide (step-by-step)
-   ═══════════════════════════════════════════════════════════════
-
-   STEP 1 — Create a free EmailJS account
-   ────────────────────────────────────────
-   • Go to https://www.emailjs.com/ and click "Sign Up Free"
-   • The free tier gives you 200 emails/month — plenty for a
-     portfolio contact form.
-
-   STEP 2 — Add an Email Service
-   ────────────────────────────────────────
-   • In the EmailJS dashboard, click  "Add New Service"
-   • Choose your email provider (Gmail recommended)
-   • Click "Connect Account" and sign in with your Google account
-   • Grant EmailJS permission to send on your behalf
-   • Give the service a name (e.g. "Portfolio Contact")
-   • Click "Create Service"
-   • ✅ Note down your  Service ID  (e.g. "service_abc1234")
-
-   STEP 3 — Create an Email Template
-   ────────────────────────────────────────
-   • Go to "Email Templates" → "Create New Template"
-   • Set these fields:
-       To Email :  your-actual-email@gmail.com
-       Subject  :  Portfolio Contact: {{subject}}
-       Body     :
-         ┌──────────────────────────────────────────────┐
-         │  From:    {{from_name}} ({{from_email}})     │
-         │  Subject: {{subject}}                        │
-         │                                              │
-         │  Message:                                    │
-         │  {{message}}                                 │
-         └──────────────────────────────────────────────┘
-   • The  Reply To  field should be:  {{from_email}}
-   • Click "Save"
-   • ✅ Note down your  Template ID  (e.g. "template_xyz7890")
-
-   STEP 4 — Get your Public Key
-   ────────────────────────────────────────
-   • Go to "Account" → "API Keys"
-   • Copy the  Public Key  (e.g. "aBcDeFgHiJkLmNo")
-   • ⚠️ This key is safe to expose in frontend code — it can
-     only be used to send emails through YOUR templates.
-
-   STEP 5 — Local development (.env file)
-   ────────────────────────────────────────
-   • Copy  .env.example  to  .env  in the frontend/ folder
-   • Fill in your values:
-       VITE_EMAILJS_SERVICE_ID=service_xxxxxxx
-       VITE_EMAILJS_TEMPLATE_ID=template_xxxxxxx
-       VITE_EMAILJS_PUBLIC_KEY=xxxxxxxxxxxxxxx
-   • Restart the dev server (npm run dev)
-
-   STEP 6 — GitHub Pages deployment (GitHub Secrets)
-   ────────────────────────────────────────
-   • .env is NOT committed to Git (it's in .gitignore)
-   • Go to your GitHub repo → Settings → Secrets and variables
-     → Actions → "New repository secret"
-   • Add these three secrets:
-       Name: VITE_EMAILJS_SERVICE_ID    Value: service_xxxxxxx
-       Name: VITE_EMAILJS_TEMPLATE_ID   Value: template_xxxxxxx
-       Name: VITE_EMAILJS_PUBLIC_KEY     Value: xxxxxxxxxxxxxxx
-   • The deploy.yml workflow injects them as env vars at build
-     time so Vite can inline them into the bundle.
-
-   ═══════════════════════════════════════════════════════════════ */
-const EMAILJS_CONFIG = {
-  serviceId:  import.meta.env.VITE_EMAILJS_SERVICE_ID  || 'YOUR_SERVICE_ID',
-  templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID',
-  publicKey:  import.meta.env.VITE_EMAILJS_PUBLIC_KEY  || 'YOUR_PUBLIC_KEY',
-};
-
-/* ═══════════════════════════════════════════════════════════════
    Static Data
    ═══════════════════════════════════════════════════════════════ */
 const contactInfo = [
@@ -107,29 +30,28 @@ const contactInfo = [
   {
     icon: HiOutlineMapPin,
     label: 'Location',
-    value: 'Pakistan 🇵🇰',
+    value: 'Dubai, United Arab Emirates',
     color: 'var(--accent-blue)',
   },
   {
     icon: HiOutlineClock,
     label: 'Response Time',
-    value: 'Within 24 hours',
+    value: 'Usually within 24 hours',
     color: 'var(--accent-purple)',
   },
   {
     icon: HiOutlineBriefcase,
-    label: 'Status',
-    value: 'Available for projects',
-    color: 'var(--accent-green)',
-    showDot: true,
+    label: 'Availability',
+    value: 'Open to projects & collaborations',
+    color: 'var(--accent-yellow)',
   },
 ];
 
 const socials = [
-  { name: 'Facebook',  icon: FaFacebookF,  url: '#', hoverColor: '#1877F2' },
-  { name: 'LinkedIn',  icon: FaLinkedinIn, url: '#', hoverColor: '#0A66C2' },
-  { name: 'Instagram', icon: FaInstagram,  url: '#', hoverColor: '#E4405F' },
-  { name: 'GitHub',    icon: FaGithub,     url: 'https://github.com/JavaidIqbal786', hoverColor: '#e6edf3' },
+  { name: 'Facebook',  icon: FaFacebookF,  url: 'https://www.facebook.com/javaid.iqbal.14268', color: '#1877F2' },
+  { name: 'LinkedIn',  icon: FaLinkedinIn, url: 'https://www.linkedin.com/in/javaidiqbaldev/',  color: '#0A66C2' },
+  { name: 'Instagram', icon: FaInstagram,  url: 'https://www.instagram.com/javaid.iqbal.786/',  color: '#E4405F' },
+  { name: 'GitHub',    icon: FaGithub,     url: 'https://github.com/JavaidIqbal786',           color: '#e6edf3' },
 ];
 
 /* ═══════════════════════════════════════════════════════════════
@@ -149,6 +71,15 @@ const validate = (values) => {
   return errors;
 };
 
+/* Mailto builder */
+const buildMailto = ({ name, email, subject, message }) => {
+  const params = new URLSearchParams({
+    subject: `${subject || 'Portfolio contact'} — ${name || 'Someone'}`,
+    body: `From: ${name || 'N/A'} <${email || 'N/A'}>\n\n${message || ''}`,
+  });
+  return `mailto:javaidiqbaldev@gmail.com?${params.toString()}`;
+};
+
 /* ═══════════════════════════════════════════════════════════════
    Social Link
    ═══════════════════════════════════════════════════════════════ */
@@ -164,44 +95,21 @@ const SocialLink = ({ social }) => {
                        shadow-lg z-10">
         {social.name}
       </span>
+      {/* icon button */}
       <a
         href={social.url}
         target="_blank"
-        rel="noopener noreferrer"
-        aria-label={social.name}
-        className="flex h-11 w-11 items-center justify-center rounded-xl
-                   bg-[var(--bg-card)] border border-[var(--border)]
-                   text-[var(--text-muted)] transition-all duration-300
-                   hover:scale-110 hover:border-transparent"
-        onMouseEnter={(e) => {
-          e.currentTarget.style.color = social.hoverColor;
-          e.currentTarget.style.boxShadow = `0 0 18px ${social.hoverColor}44`;
-          e.currentTarget.style.borderColor = `${social.hoverColor}55`;
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.color = '';
-          e.currentTarget.style.boxShadow = '';
-          e.currentTarget.style.borderColor = '';
-        }}
+        rel="noreferrer"
+        className="h-10 w-10 rounded-full bg-[var(--bg-card)] border border-[var(--border)]
+                   flex items-center justify-center text-[var(--text-muted)]
+                   hover:text-[var(--text-primary)] hover:border-transparent
+                   hover:scale-105 transition-all duration-200"
+        style={{ '--hover-color': social.color }}
       >
-        <Icon className="text-lg" />
+        <Icon className="text-lg group-hover:text-[var(--hover-color)]" />
       </a>
     </div>
   );
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   Form Field
-   ═══════════════════════════════════════════════════════════════ */
-const fieldBase =
-  `w-full rounded-lg bg-[var(--bg-primary)] border px-4 py-3 text-sm
-   text-[var(--text-primary)] placeholder:text-[var(--text-muted)]/50
-   outline-none transition-all duration-300 font-body`;
-
-const fieldBorder = (touched, error) => {
-  if (!touched) return 'border-[var(--border)] focus:border-[var(--accent-green)]';
-  if (error) return 'border-red-500/60 focus:border-red-500';
-  return 'border-[var(--accent-green)]/50 focus:border-[var(--accent-green)]';
 };
 
 /* ═══════════════════════════════════════════════════════════════
@@ -214,7 +122,6 @@ const Contact = () => {
   const [values, setValues] = useState({ name: '', email: '', subject: '', message: '' });
   const [touched, setTouched] = useState({});
   const [errors, setErrors] = useState({});
-  const [sending, setSending] = useState(false);
 
   /* ── handlers ── */
   const handleChange = (e) => {
@@ -235,7 +142,7 @@ const Contact = () => {
     setErrors((prev) => ({ ...prev, [name]: next[name] || undefined }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const newErrors = validate(values);
     setErrors(newErrors);
@@ -246,27 +153,8 @@ const Contact = () => {
       return;
     }
 
-    setSending(true);
-    try {
-      await emailjs.sendForm(
-        EMAILJS_CONFIG.serviceId,
-        EMAILJS_CONFIG.templateId,
-        formRef.current,
-        EMAILJS_CONFIG.publicKey,
-      );
-      toast.success('Message sent successfully! I\'ll get back to you soon.', {
-        duration: 5000,
-        icon: '🚀',
-      });
-      setValues({ name: '', email: '', subject: '', message: '' });
-      setTouched({});
-      setErrors({});
-    } catch (err) {
-      console.error('EmailJS Error:', err);
-      toast.error('Failed to send message. Please try again later.');
-    } finally {
-      setSending(false);
-    }
+    window.location.href = buildMailto(values);
+    toast.success('Opening your email app…');
   };
 
   /* ── animation variants ── */
@@ -296,283 +184,206 @@ const Contact = () => {
                          text-[var(--accent-green)] bg-[var(--accent-green)]/5">
             &lt; Contact /&gt;
           </span>
-          <h2 className="section-title">
-            Let's Work <span className="gradient-text">Together</span>
+          <h2 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] mb-4">
+            Let&apos;s Build Something Great
           </h2>
-          <p className="section-subtitle max-w-xl mx-auto">
-            Have a project in mind or just want to say hello?
-            I'd love to hear from you.
+          <p className="max-w-2xl mx-auto text-[var(--text-muted)]">
+            Have a project in mind or just want to connect? Drop me a line and I&apos;ll get back to you soon.
           </p>
         </motion.div>
 
-        {/* ── Two-column layout ── */}
-        <div className="grid gap-8 lg:grid-cols-5 lg:gap-14">
-
+        <div className="grid lg:grid-cols-5 gap-10">
           {/* ─────── LEFT — Info ─────── */}
           <AnimatedSection direction="left" delay={0.1} className="lg:col-span-2">
-          <motion.div
-            variants={slideLeft}
-            initial="hidden"
-            animate={inView ? 'show' : 'hidden'}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="lg:col-span-2 flex flex-col gap-8"
-          >
-            {/* headline */}
-            <div>
-              <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-3">
-                Get In Touch
-              </h3>
-              <p className="text-[var(--text-muted)] text-sm leading-relaxed">
-                Whether you have a question, a potential collaboration, or an exciting
-                project — don't hesitate to reach out. I'm always open to new
-                opportunities and meaningful connections.
-              </p>
-            </div>
+            <motion.div
+              variants={slideLeft}
+              initial="hidden"
+              animate={inView ? 'show' : 'hidden'}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="glass-card p-6 sm:p-8 flex flex-col gap-6 h-full"
+            >
+              <div className="space-y-3">
+                <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-3">
+                  Get In Touch
+                </h3>
+                <p className="text-[var(--text-muted)] text-sm leading-relaxed">
+                  Whether you have a question, a potential collaboration, or an exciting
+                  project — don&apos;t hesitate to reach out. I&apos;m always open to new
+                  opportunities and meaningful connections.
+                </p>
+              </div>
 
-            {/* info cards */}
-            <div className="flex flex-col gap-4">
-              {contactInfo.map((item, i) => {
-                const Icon = item.icon;
-                return (
-                  <motion.div
-                    key={item.label}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={inView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
-                    className="flex items-center gap-4 p-4 rounded-xl
-                               bg-[var(--bg-card)]/60 border border-[var(--border)]
-                               hover:border-[var(--accent-green)]/30 transition-colors
-                               duration-300"
-                  >
-                    <div
-                      className="flex h-10 w-10 shrink-0 items-center justify-center
-                                 rounded-lg"
-                      style={{
-                        backgroundColor: `${item.color}12`,
-                        color: item.color,
-                      }}
+              {/* info cards */}
+              <div className="flex flex-col gap-4">
+                {contactInfo.map((item, i) => {
+                  const Icon = item.icon;
+                  return (
+                    <motion.div
+                      key={item.label}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={inView ? { opacity: 1, x: 0 } : {}}
+                      transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
+                      className="flex items-center gap-4 p-4 rounded-xl
+                                 bg-[var(--bg-card)] border border-[var(--border)]"
                     >
-                      <Icon className="text-lg" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-[var(--text-muted)] mb-0.5">
-                        {item.label}
-                      </p>
-                      <p className="text-sm text-[var(--text-primary)] font-medium flex items-center gap-2">
-                        {item.showDot && (
-                          <span className="relative flex h-2 w-2">
-                            <span className="absolute inline-flex h-full w-full animate-ping
-                                           rounded-full bg-[var(--accent-green)] opacity-75" />
-                            <span className="relative inline-flex h-2 w-2 rounded-full
-                                           bg-[var(--accent-green)]" />
-                          </span>
-                        )}
-                        {item.value}
-                      </p>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-
-            {/* social links */}
-            <div>
-              <p className="text-xs text-[var(--text-muted)] uppercase tracking-widest mb-3">
-                Find me on
-              </p>
-              <div className="flex gap-3">
-                {socials.map((s) => (
-                  <SocialLink key={s.name} social={s} />
-                ))}
+                      <div className="h-11 w-11 rounded-xl bg-[var(--bg-secondary)]
+                                      flex items-center justify-center text-lg"
+                           style={{ color: item.color }}>
+                        <Icon />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-[var(--text-muted)] text-xs uppercase tracking-wider">
+                          {item.label}
+                        </p>
+                        <p className="text-[var(--text-primary)] font-medium">
+                          {item.value}
+                        </p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </div>
-            </div>
 
-            {/* decorative terminal */}
-            <div className="hidden lg:block mt-2">
-              <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card)]
-                              overflow-hidden">
-                {/* title bar */}
-                <div className="flex items-center gap-2 px-4 py-2.5 border-b
-                                border-[var(--border)] bg-[var(--bg-secondary)]">
-                  <span className="h-2.5 w-2.5 rounded-full bg-red-500/80" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-yellow-500/80" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-green-500/80" />
-                  <span className="ml-2 text-xs text-[var(--text-muted)] font-mono">
-                    contact
-                  </span>
-                </div>
-                <div className="p-4 font-mono text-xs leading-relaxed">
-                  <p className="text-[var(--text-muted)]">
-                    <span className="text-[var(--accent-green)]">javaid</span>
-                    <span className="text-[var(--text-muted)]">@</span>
-                    <span className="text-[var(--accent-blue)]">contact</span>
-                    <span className="text-[var(--text-muted)]">:~$ </span>
-                    <span className="text-[var(--text-primary)]">
-                      ready to collaborate...
-                    </span>
-                    <span className="inline-block w-2 h-4 ml-0.5 bg-[var(--accent-green)]
-                                   animate-pulse align-middle" />
-                  </p>
+              {/* socials */}
+              <div className="pt-4 border-t border-[var(--border)]">
+                <p className="text-[var(--text-muted)] text-sm mb-3">
+                  Let&apos;s connect
+                </p>
+                <div className="flex gap-3">
+                  {socials.map((social) => (
+                    <SocialLink key={social.name} social={social} />
+                  ))}
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
           </AnimatedSection>
 
           {/* ─────── RIGHT — Form ─────── */}
           <AnimatedSection direction="right" delay={0.2} className="lg:col-span-3">
-          <motion.div
-            variants={slideRight}
-            initial="hidden"
-            animate={inView ? 'show' : 'hidden'}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-3"
-          >
-            <form
-              ref={formRef}
-              onSubmit={handleSubmit}
-              noValidate
-              className="glass-card p-6 sm:p-8 flex flex-col gap-5"
+            <motion.div
+              variants={slideRight}
+              initial="hidden"
+              animate={inView ? 'show' : 'hidden'}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="lg:col-span-3"
             >
-              {/* hidden field for EmailJS template */}
-              <input type="hidden" name="to_name" value="Javaid Iqbal" />
-
-              {/* Name */}
-              <div>
-                <label htmlFor="name" className="block text-xs text-[var(--text-muted)]
-                                                  uppercase tracking-wider mb-1.5">
-                  Name <span className="text-red-400">*</span>
-                </label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  placeholder="John Doe"
-                  value={values.name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={`${fieldBase} ${fieldBorder(touched.name, errors.name)}`}
-                />
-                {touched.name && errors.name && (
-                  <p className="mt-1 text-xs text-red-400">{errors.name}</p>
-                )}
-              </div>
-
-              {/* Email */}
-              <div>
-                <label htmlFor="email" className="block text-xs text-[var(--text-muted)]
-                                                   uppercase tracking-wider mb-1.5">
-                  Email <span className="text-red-400">*</span>
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="john@example.com"
-                  value={values.email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={`${fieldBase} ${fieldBorder(touched.email, errors.email)}`}
-                />
-                {touched.email && errors.email && (
-                  <p className="mt-1 text-xs text-red-400">{errors.email}</p>
-                )}
-              </div>
-
-              {/* Subject */}
-              <div>
-                <label htmlFor="subject" className="block text-xs text-[var(--text-muted)]
-                                                     uppercase tracking-wider mb-1.5">
-                  Subject <span className="text-red-400">*</span>
-                </label>
-                <input
-                  id="subject"
-                  name="subject"
-                  type="text"
-                  placeholder="Project Inquiry"
-                  value={values.subject}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={`${fieldBase} ${fieldBorder(touched.subject, errors.subject)}`}
-                />
-                {touched.subject && errors.subject && (
-                  <p className="mt-1 text-xs text-red-400">{errors.subject}</p>
-                )}
-              </div>
-
-              {/* Message */}
-              <div>
-                <div className="flex justify-between items-center mb-1.5">
-                  <label htmlFor="message" className="text-xs text-[var(--text-muted)]
-                                                       uppercase tracking-wider">
-                    Message <span className="text-red-400">*</span>
-                  </label>
-                  <span className={`text-xs font-mono ${
-                    values.message.trim().length >= 20
-                      ? 'text-[var(--accent-green)]'
-                      : 'text-[var(--text-muted)]'
-                  }`}>
-                    {values.message.trim().length} / 20 min
-                  </span>
-                </div>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={5}
-                  placeholder="Tell me about your project or idea..."
-                  value={values.message}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={`${fieldBase} resize-none
-                    ${fieldBorder(touched.message, errors.message)}`}
-                />
-                {touched.message && errors.message && (
-                  <p className="mt-1 text-xs text-red-400">{errors.message}</p>
-                )}
-              </div>
-
-              {/* ── Hidden EmailJS fields (mapped from visible fields) ── */}
-              <input type="hidden" name="from_name"  value={values.name} />
-              <input type="hidden" name="from_email" value={values.email} />
-
-              {/* Submit */}
-              <button
-                type="submit"
-                disabled={sending}
-                className="btn-primary w-full flex items-center justify-center gap-2.5
-                           disabled:opacity-60 disabled:cursor-not-allowed
-                           mt-2"
+              <form
+                ref={formRef}
+                onSubmit={handleSubmit}
+                noValidate
+                className="glass-card p-6 sm:p-8 flex flex-col gap-5"
               >
-                {sending ? (
-                  <>
-                    <svg
-                      className="h-4 w-4 animate-spin"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12" cy="12" r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                      />
-                    </svg>
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    <HiOutlinePaperAirplane className="text-lg -rotate-12" />
-                    Send Message
-                  </>
-                )}
-              </button>
-            </form>
-          </motion.div>
+                {/* hidden field to keep the same template variables if ever needed */}
+                <input type="hidden" name="to_name" value="Javaid Iqbal" />
+
+                {/* Name */}
+                <div>
+                  <label htmlFor="name" className="block text-xs text-[var(--text-muted)]
+                                                    uppercase tracking-wider mb-1.5">
+                    Name <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    placeholder="John Doe"
+                    value={values.name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={`${fieldBase} ${fieldBorder(touched.name, errors.name)}`}
+                  />
+                  {touched.name && errors.name && (
+                    <p className="mt-1 text-xs text-red-400">{errors.name}</p>
+                  )}
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label htmlFor="email" className="block text-xs text-[var(--text-muted)]
+                                                     uppercase tracking-wider mb-1.5">
+                    Email <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="john@example.com"
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={`${fieldBase} ${fieldBorder(touched.email, errors.email)}`}
+                  />
+                  {touched.email && errors.email && (
+                    <p className="mt-1 text-xs text-red-400">{errors.email}</p>
+                  )}
+                </div>
+
+                {/* Subject */}
+                <div>
+                  <label htmlFor="subject" className="block text-xs text-[var(--text-muted)]
+                                                       uppercase tracking-wider mb-1.5">
+                    Subject <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    id="subject"
+                    name="subject"
+                    type="text"
+                    placeholder="Project Inquiry"
+                    value={values.subject}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={`${fieldBase} ${fieldBorder(touched.subject, errors.subject)}`}
+                  />
+                  {touched.subject && errors.subject && (
+                    <p className="mt-1 text-xs text-red-400">{errors.subject}</p>
+                  )}
+                </div>
+
+                {/* Message */}
+                <div>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <label htmlFor="message" className="text-xs text-[var(--text-muted)]
+                                                         uppercase tracking-wider">
+                      Message <span className="text-red-400">*</span>
+                    </label>
+                    <span className={`text-xs font-mono ${
+                      values.message.trim().length >= 20
+                        ? 'text-[var(--accent-green)]'
+                        : 'text-[var(--text-muted)]'
+                    }`}>
+                      {values.message.trim().length} / 20 min
+                    </span>
+                  </div>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={5}
+                    placeholder="Tell me about your project or idea..."
+                    value={values.message}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={`${fieldBase} resize-none
+                      ${fieldBorder(touched.message, errors.message)}`}
+                  />
+                  {touched.message && errors.message && (
+                    <p className="mt-1 text-xs text-red-400">{errors.message}</p>
+                  )}
+                </div>
+
+                {/* Hidden fields (kept for compatibility; harmless) */}
+                <input type="hidden" name="from_name"  value={values.name} />
+                <input type="hidden" name="from_email" value={values.email} />
+
+                {/* Submit */}
+                <button
+                  type="submit"
+                  className="btn-primary w-full flex items-center justify-center gap-2.5 mt-2"
+                >
+                  <HiOutlinePaperAirplane className="text-lg -rotate-12" />
+                  Send Message
+                </button>
+              </form>
+            </motion.div>
           </AnimatedSection>
         </div>
       </div>
@@ -581,3 +392,17 @@ const Contact = () => {
 };
 
 export default Contact;
+
+/* ═══════════════════════════════════════════════════════════════
+   Styled helpers
+   ═══════════════════════════════════════════════════════════════ */
+const fieldBase = `w-full rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)]
+                    px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
+                    focus:outline-none focus:border-[var(--accent-green)] focus:ring-2
+                    focus:ring-[var(--accent-green)]/20 transition`;
+
+const fieldBorder = (touched, error) => {
+  if (!touched) return '';
+  if (error) return 'border-red-400/70 focus:border-red-400 focus:ring-red-400/20';
+  return 'border-[var(--accent-green)]/60';
+};
