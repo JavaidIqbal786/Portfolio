@@ -1,98 +1,112 @@
-import { Github, Linkedin, Mail, Facebook } from "lucide-react";
+import { motion } from 'framer-motion';
+import { Mail, Linkedin, Facebook, Github } from 'lucide-react';
 
 export default function Contact() {
   return (
-    <section id="contact" className="py-16">
-      <div className="mx-auto max-w-4xl px-4">
-        <h2 className="text-3xl font-bold mb-8">Contact Information</h2>
-
-        <div className="space-y-3 mb-8">
-          <p>
-            Email:{" "}
-            <a
-              href="mailto:javaidiqbaldev@gmail.com"
-              className="text-emerald-400 hover:underline"
-            >
-              javaidiqbaldev@gmail.com
-            </a>
+    <section id="contact" className="relative py-20">
+      <div className="mx-auto max-w-6xl px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur"
+        >
+          <h2 className="mb-4 text-3xl font-bold text-white md:text-4xl">Contact Information</h2>
+          <p className="mb-8 text-white/70">
+            I’m open to projects, collaborations, and opportunities. Reach out directly:
           </p>
 
-          <p>
-            LinkedIn:{" "}
+          {/* Public contact details */}
+          <div className="grid gap-4 text-white/90">
+            <p>
+              <span className="font-semibold text-white">Email: </span>
+              <a
+                href="mailto:javaidiqbaldev@gmail.com"
+                className="text-emerald-400 hover:underline"
+              >
+                javaidiqbaldev@gmail.com
+              </a>
+            </p>
+
+            <p>
+              <span className="font-semibold text-white">LinkedIn: </span>
+              <a
+                href="https://www.linkedin.com/in/javaidiqbalawan/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="break-all text-emerald-400 hover:underline"
+              >
+                https://www.linkedin.com/in/javaidiqbalawan/
+              </a>
+            </p>
+
+            <p>
+              <span className="font-semibold text-white">Facebook: </span>
+              <a
+                href="https://web.facebook.com/IJavaidIqbal1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="break-all text-emerald-400 hover:underline"
+              >
+                https://web.facebook.com/IJavaidIqbal1
+              </a>
+            </p>
+
+            <p>
+              <span className="font-semibold text-white">GitHub: </span>
+              <a
+                href="https://github.com/JavaidIqbal786"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="break-all text-emerald-400 hover:underline"
+              >
+                https://github.com/JavaidIqbal786
+              </a>
+            </p>
+          </div>
+
+          {/* Social icons */}
+          <div className="mt-8 flex items-center gap-4">
+            <a
+              href="mailto:javaidiqbaldev@gmail.com"
+              aria-label="Email"
+              className="rounded-lg border border-white/10 p-3 text-white transition hover:border-emerald-400 hover:text-emerald-400"
+            >
+              <Mail size={20} />
+            </a>
+
             <a
               href="https://www.linkedin.com/in/javaidiqbalawan/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-emerald-400 hover:underline break-all"
+              aria-label="LinkedIn"
+              className="rounded-lg border border-white/10 p-3 text-white transition hover:border-emerald-400 hover:text-emerald-400"
             >
-              https://www.linkedin.com/in/javaidiqbalawan/
+              <Linkedin size={20} />
             </a>
-          </p>
 
-          <p>
-            Facebook:{" "}
             <a
               href="https://web.facebook.com/IJavaidIqbal1"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-emerald-400 hover:underline break-all"
+              aria-label="Facebook"
+              className="rounded-lg border border-white/10 p-3 text-white transition hover:border-emerald-400 hover:text-emerald-400"
             >
-              https://web.facebook.com/IJavaidIqbal1
+              <Facebook size={20} />
             </a>
-          </p>
 
-          <p>
-            GitHub:{" "}
             <a
               href="https://github.com/JavaidIqbal786"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-emerald-400 hover:underline break-all"
+              aria-label="GitHub"
+              className="rounded-lg border border-white/10 p-3 text-white transition hover:border-emerald-400 hover:text-emerald-400"
             >
-              https://github.com/JavaidIqbal786
+              <Github size={20} />
             </a>
-          </p>
-        </div>
-
-        <div className="flex items-center gap-4 text-white">
-          <a
-            href="mailto:javaidiqbaldev@gmail.com"
-            aria-label="Email"
-            className="hover:text-emerald-400 transition-colors"
-          >
-            <Mail />
-          </a>
-
-          <a
-            href="https://www.linkedin.com/in/javaidiqbalawan/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            className="hover:text-emerald-400 transition-colors"
-          >
-            <Linkedin />
-          </a>
-
-          <a
-            href="https://web.facebook.com/IJavaidIqbal1"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facebook"
-            className="hover:text-emerald-400 transition-colors"
-          >
-            <Facebook />
-          </a>
-
-          <a
-            href="https://github.com/JavaidIqbal786"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub"
-            className="hover:text-emerald-400 transition-colors"
-          >
-            <Github />
-          </a>
-        </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
