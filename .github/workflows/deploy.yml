@@ -1,7 +1,8 @@
 # ═══════════════════════════════════════════════════════════════
 #  GitHub Pages Deployment — Portfolio
 #  Triggers on every push to `main`. Builds the Vite app and
-#  deploys the dist/ folder to the gh-pages branch.
+#  deploys the dist/ folder via the official GitHub Pages action.
+#  Requires Pages source set to "GitHub Actions" in repo settings.
 # ═══════════════════════════════════════════════════════════════
 
 name: Deploy Portfolio to GitHub Pages
@@ -21,7 +22,13 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write
+      contents: read
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       # ── a) Checkout code ──────────────────────────────────────
@@ -44,10 +51,13 @@ jobs:
       - name: Build production bundle
         run: cd frontend && npm run build
 
-      # ── e) Deploy to gh-pages branch ─────────────────────────
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      # ── e) Upload Pages artifact ──────────────────────────────
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./frontend/dist
-          cname: javaidiqbaldev.me
+          path: ./frontend/dist
+
+      # ── f) Deploy to GitHub Pages ─────────────────────────────
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
