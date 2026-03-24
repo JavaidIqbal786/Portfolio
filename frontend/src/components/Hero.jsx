@@ -4,7 +4,7 @@ import { Link } from 'react-scroll';
 import { TypeAnimation } from 'react-type-animation';
 import Particles, { initParticlesEngine } from '@tsparticles/react';
 import { loadSlim } from '@tsparticles/slim';
-import { FiDownload, FiChevronDown } from 'react-icons/fi';
+import { FiChevronDown } from 'react-icons/fi';
 
 /* ═══════════════════════════════════════════════════════════════
    Particles configuration
@@ -255,15 +255,6 @@ const Hero = () => {
             >
               Contact Me
             </Link>
-
-            <a
-              href="/cv.pdf"
-              download
-              className="btn-secondary cursor-pointer inline-flex items-center gap-2"
-            >
-              <FiDownload className="text-lg" />
-              Download CV
-            </a>
           </motion.div>
         </div>
 

@@ -20,16 +20,15 @@ import {
   SiFramer,
   SiGithubpages,
 } from 'react-icons/si';
-import { MdOutlineAlternateEmail } from 'react-icons/md';
 
 /* ═══════════════════════════════════════════════════════════════
    Data
    ═══════════════════════════════════════════════════════════════ */
 const socials = [
-  { name: 'Facebook',  icon: FaFacebookF,  url: '#',                                    color: '#1877F2' },
-  { name: 'LinkedIn',  icon: FaLinkedinIn, url: '#',                                    color: '#0A66C2' },
-  { name: 'Instagram', icon: FaInstagram,  url: '#',                                    color: '#E4405F' },
-  { name: 'GitHub',    icon: FaGithub,     url: 'https://github.com/JavaidIqbal786',    color: '#e6edf3' },
+  { name: 'Facebook',  icon: FaFacebookF,  url: 'https://web.facebook.com/IJavaidIqbal1',          color: '#1877F2' },
+  { name: 'LinkedIn',  icon: FaLinkedinIn, url: 'https://www.linkedin.com/in/javaidiqbalawan/',    color: '#0A66C2' },
+  { name: 'Instagram', icon: FaInstagram,  url: 'https://www.instagram.com/javaidiqbal786/',       color: '#E4405F' },
+  { name: 'GitHub',    icon: FaGithub,     url: 'https://github.com/JavaidIqbal786',               color: '#e6edf3' },
 ];
 
 const quickLinks = [
@@ -42,12 +41,11 @@ const quickLinks = [
 ];
 
 const techStack = [
-  { name: 'React',         icon: SiReact,              color: '#61DAFB' },
-  { name: 'Vite',          icon: SiVite,               color: '#646CFF' },
-  { name: 'Tailwind CSS',  icon: SiTailwindcss,        color: '#06B6D4' },
-  { name: 'Framer Motion', icon: SiFramer,             color: '#0055FF' },
-  { name: 'EmailJS',       icon: MdOutlineAlternateEmail, color: '#FF6B6B' },
-  { name: 'GitHub Pages',  icon: SiGithubpages,        color: '#00ff88' },
+  { name: 'React',         icon: SiReact,       color: '#61DAFB' },
+  { name: 'Vite',          icon: SiVite,        color: '#646CFF' },
+  { name: 'Tailwind CSS',  icon: SiTailwindcss, color: '#06B6D4' },
+  { name: 'Framer Motion', icon: SiFramer,      color: '#0055FF' },
+  { name: 'GitHub Pages',  icon: SiGithubpages, color: '#00ff88' },
 ];
 
 /* ═══════════════════════════════════════════════════════════════
