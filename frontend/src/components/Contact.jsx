@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import { Mail, Linkedin, Facebook, Github } from 'lucide-react';
+import { MdOutlineEmail } from 'react-icons/md';
+import { FaLinkedinIn, FaFacebookF, FaGithub } from 'react-icons/fa6';
 
 export default function Contact() {
   return (
@@ -73,7 +74,7 @@ export default function Contact() {
               aria-label="Email"
               className="rounded-lg border border-white/10 p-3 text-white transition hover:border-emerald-400 hover:text-emerald-400"
             >
-              <Mail size={20} />
+              <MdOutlineEmail className="text-xl" />
             </a>
 
             <a
@@ -83,7 +84,7 @@ export default function Contact() {
               aria-label="LinkedIn"
               className="rounded-lg border border-white/10 p-3 text-white transition hover:border-emerald-400 hover:text-emerald-400"
             >
-              <Linkedin size={20} />
+              <FaLinkedinIn className="text-xl" />
             </a>
 
             <a
@@ -93,7 +94,7 @@ export default function Contact() {
               aria-label="Facebook"
               className="rounded-lg border border-white/10 p-3 text-white transition hover:border-emerald-400 hover:text-emerald-400"
             >
-              <Facebook size={20} />
+              <FaFacebookF className="text-xl" />
             </a>
 
             <a
@@ -103,7 +104,7 @@ export default function Contact() {
               aria-label="GitHub"
               className="rounded-lg border border-white/10 p-3 text-white transition hover:border-emerald-400 hover:text-emerald-400"
             >
-              <Github size={20} />
+              <FaGithub className="text-xl" />
             </a>
           </div>
         </motion.div>

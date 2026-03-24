@@ -1,10 +1,7 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Link } from 'react-scroll';
-import {
-  FiDownload,
-  FiArrowRight,
-} from 'react-icons/fi';
+import { FiArrowRight } from 'react-icons/fi';
 import AnimatedSection from './AnimatedSection';
 import {
   VerticalTimeline,
@@ -282,15 +279,6 @@ const About = () => {
                 Let's Work Together
                 <FiArrowRight />
               </Link>
-
-              <a
-                href="/cv.pdf"
-                download
-                className="btn-secondary inline-flex items-center gap-2"
-              >
-                <FiDownload />
-                Download CV
-              </a>
             </motion.div>
           </motion.div>
           </AnimatedSection>
